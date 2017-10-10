@@ -28,4 +28,11 @@ function makeRequest(language) {
   });
 }
 
-makeRequest(process.argv[2]);
+const language = process.argv[2];
+
+if (language) {
+  makeRequest(language);
+} else {
+  console.error("Usage: get-gitignore <language>");
+  process.exit(64);
+}
