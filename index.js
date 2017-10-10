@@ -16,12 +16,25 @@ function handleResponse(response) {
   })
 }
 
+function handleError(response, language) {
+  switch (response.status) {
+    case 404:
+      console.error(`No .gitignore template found for "${language}".`);
+      break;
+    default:
+      console.error("An error occurred.");
+      break;
+  }
+
+  process.exit(1);
+}
+
 function makeRequest(language) {
   fetch(buildGitignoreUrl(language)).then(response => {
     if (response.ok) {
       return handleResponse(response);
     } else {
-      console.log(response.statusText);
+      handleError(response, language);
     }
   }).catch(error => {
     console.log(error);
