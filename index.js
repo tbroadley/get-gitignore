@@ -13,7 +13,7 @@ function handleResponse(response, language) {
         console.log(`Template for ${language} written to .gitignore.`);
       });
     } else {
-      return makeRequest(match[1]);
+      return makeRequest(match[1], language);
     }
   })
 }
@@ -31,12 +31,12 @@ function handleError(response, language) {
   process.exit(1);
 }
 
-function makeRequest(language) {
+function makeRequest(language, originalLanguage) {
   fetch(buildGitignoreUrl(language)).then(response => {
     if (response.ok) {
-      return handleResponse(response, language);
+      return handleResponse(response, originalLanguage || language);
     } else {
-      handleError(response, language);
+      handleError(response, originalLanguage);
     }
   }).catch(error => {
     console.log(error);
