@@ -2,8 +2,12 @@
 const fs = require('fs-extra');
 const fetch = require('node-fetch');
 
+function capitalize(word) {
+  return word[0].toUpperCase() + word.slice(1);
+}
+
 function buildGitignoreUrl(language) {
-  return `https://github.com/github/gitignore/raw/master/${language}.gitignore`;
+  return `https://github.com/github/gitignore/raw/master/${capitalize(language)}.gitignore`;
 }
 
 function handleResponse(response, language) {
