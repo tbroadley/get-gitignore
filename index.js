@@ -5,11 +5,13 @@ function buildGitignoreUrl(language) {
   return `https://github.com/github/gitignore/raw/master/${language}.gitignore`;
 }
 
-function handleResponse(response) {
+function handleResponse(response, language) {
   response.text().then(text => {
     const match = /^(.*)\.gitignore$/.exec(text);
     if (match === null) {
-      return fs.writeFile('./.gitignore', text);
+      return fs.writeFile('./.gitignore', text).then(() => {
+        console.log(`Template for ${language} written to .gitignore.`);
+      });
     } else {
       return makeRequest(match[1]);
     }
@@ -32,7 +34,7 @@ function handleError(response, language) {
 function makeRequest(language) {
   fetch(buildGitignoreUrl(language)).then(response => {
     if (response.ok) {
-      return handleResponse(response);
+      return handleResponse(response, language);
     } else {
       handleError(response, language);
     }
